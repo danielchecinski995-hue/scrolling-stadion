@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stadium Scroll Animation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            height: 600vh;
+        }
+
+        .scroll-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+        }
+
+        #frame {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="scroll-container">
+        <img id="frame" src="frames/frame_001.jpg" alt="Stadium">
+    </div>
+
+    <script>
+        const TOTAL_FRAMES = 96;
+        const frameImg = document.getElementById('frame');
+
+        // Preload all frames
+        const frames = [];
+        for (let i = 1; i <= TOTAL_FRAMES; i++) {
+            const img = new Image();
+            img.src = 'frames/frame_' + String(i).padStart(3, '0') + '.jpg';
+            frames.push(img);
+        }
+
+        let currentFrame = -1;
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            const scrollFraction = Math.min(scrollTop / maxScroll, 1);
+
+            const frameIndex = Math.min(
+                Math.floor(scrollFraction * TOTAL_FRAMES),
+                TOTAL_FRAMES - 1
+            );
+
+            if (frameIndex !== currentFrame) {
+                currentFrame = frameIndex;
+                frameImg.src = frames[frameIndex].src;
+            }
+        });
+    </script>
+</body>
+</html>
